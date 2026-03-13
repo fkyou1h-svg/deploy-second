@@ -49,6 +49,12 @@ app.get('/', (req, res) => {
   res.sendFile(indexPath);
 });
 
+// Security check route
+app.get('/checking', (req, res) => {
+  const checkingPath = path.join(__dirname, 'checking.html');
+  res.sendFile(checkingPath);
+});
+
 // API endpoint to receive form data
 app.post('/api/send-message', (req, res) => {
   try {
